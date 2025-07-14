@@ -1,29 +1,29 @@
-console.log("Hello Wordle!");
+function Cell() {
+  let value = "";
 
-// wordBoard() represents the state of the Wordle "Gameboard"
-// Each element holds a Cell()
-// We expose a guessWord() method to add value to each element.
+  const setLetter = (letter) => {
+    value = letter;
+  };
+  const clearLetter = () => {
+    value = "";
+  };
 
-function wordBoard() {
-  const word = [];
-  const initialRandomWord = fetchRandomWord();
+  return { setLetter, clearLetter };
+}
 
-  // Create an array that will represent the state of the game board
-  for (let i = 0; i < 5; ++i) {
-    board[i].push(Cell());
+function Gameboard() {
+  const wordLength = 5;
+  const guesses = 6;
+  const board = [];
+
+  for (let i = 0; i < wordLength; ++i) {
+    board[i] = [];
+    for (let j = 0; j < guesses; ++j) {
+      board[i].push(Cell());
+    }
   }
 
-  // method of getting the current game board so that
-  // UI can render it
-  const getWord = () => word;
-
-  // method to print board in the console
-  const printWord = () => {};
+  const getBoard = () => board;
 }
 
-function fetchRandomWord() {
-  fetch(fiveLetterWords.txt).then();
-  //fetch code
-}
-
-function Cell() {}
+function GameController() {}
