@@ -1,7 +1,7 @@
 function makeGuess() {
   const array = [];
-
   let listenerActive = false;
+  let submitHandler = false;
 
   const isAlphabet = (key) => {
     return (
@@ -30,8 +30,13 @@ function makeGuess() {
     if (array.length === 5) {
       const guess = array.join("");
       console.log(`Submitted ${guess} as the guess!`);
+      if (submitHandler) submitHandler(guess);
       clearArray();
     }
+  };
+
+  const setSubmitHandler = (fn) => {
+    submitHandler = fn;
   };
 
   const keyboardListener = () => {
@@ -61,33 +66,45 @@ function makeGuess() {
     console.log(array);
   };
 
-  return { keyboardListener, getArray, submitGuess };
+  return { keyboardListener, setSubmitHandler };
 }
 
 function guessBoard() {
-  let guesses = 6;
-  const board = [];
-  for (let i = 0; i < guesses; ++i) {
-    board[i] = [];
-  }
-
-  const addToGuessBoard = (array) => {
-    board.push(array);
-  };
+  const board = Array.from({ length: 6 }, () => []);
 
   const displayGuess = () => {
     const container = document.getElementById("container");
-    container.innerHTML = board;
-    console.log(board);
+    container.innerHTML = "";
+
+    board.forEach((row) => {
+      const rowEl = document.createElement("div");
+      rowEl.classList.add("row");
+      row.forEach((char) => {
+        const cell = document.createElement("span");
+        cell.textContent = char;
+        cell.classList.add("cell");
+        rowEl.appendChild(cell);
+      });
+      container.appendChild(rowEl);
+    });
   };
 
-  return { addToGuessBoard, displayGuess };
+  return { board, displayGuess };
 }
 
 function gameController() {
   const board = guessBoard();
   const game = makeGuess();
-}
-let game = makeGuess();
 
-game.keyboardListener();
+  let currentRow = 0;
+
+  game.setSubmitHandler((guess) => {
+    board.board[currentRow] = guess.split("");
+    board.displayGuess();
+    currentRow++;
+    if (currentRow >= 6) alert("Game Over!");
+  });
+
+  game.keyboardListener();
+}
+gameController();
