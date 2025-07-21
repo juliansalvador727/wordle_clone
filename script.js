@@ -70,8 +70,7 @@ function makeGuess() {
 }
 
 function guessBoard() {
-  const board = Array.from({ length: 6 }, () => []);
-
+  const board = Array.from({ length: 6 }, () => Array(5).fill(""));
   const displayGuess = () => {
     const container = document.getElementById("container");
     container.innerHTML = "";
@@ -80,7 +79,7 @@ function guessBoard() {
       const rowEl = document.createElement("div");
       rowEl.classList.add("row");
       row.forEach((char) => {
-        const cell = document.createElement("span");
+        const cell = document.createElement("div");
         cell.textContent = char;
         cell.classList.add("cell");
         rowEl.appendChild(cell);
@@ -88,6 +87,8 @@ function guessBoard() {
       container.appendChild(rowEl);
     });
   };
+
+  displayGuess();
 
   return { board, displayGuess };
 }
